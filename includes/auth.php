@@ -19,14 +19,14 @@ if (!User::isLoggedIn()) {
     // Store intended URL for redirect after login
     $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
     
-    header('Location: ' . APP_URL . '/pages/login.php');
+    header('Location: ' . APP_URL . '/index.php');
     exit;
 }
 
 // Function to require specific role
 function requireRole(int $roleId, string $redirectUrl = null): void {
     if (!User::hasRole($roleId)) {
-        $redirect = $redirectUrl ?? APP_URL . '/pages/login.php';
+        $redirect = $redirectUrl ?? APP_URL . '/index.php';
         $_SESSION['error'] = 'You do not have permission to access this page.';
         header('Location: ' . $redirect);
         exit;
@@ -40,7 +40,7 @@ function requireAdmin(): void {
     } elseif (User::isAssistant()) {
         requireRole(ROLE_ADMIN, APP_URL . '/assistant/index.php');
     } else {
-        requireRole(ROLE_ADMIN, APP_URL . '/pages/login.php');
+        requireRole(ROLE_ADMIN, APP_URL . '/index.php');
     }
 }
 

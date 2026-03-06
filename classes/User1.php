@@ -155,7 +155,7 @@ class User {
     public static function requireAdmin(): void {
         if (!self::isLoggedIn()) {
             $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
-            header('Location: ' . APP_URL . '/pages/login.php');
+            header('Location: ' . APP_URL . '/login.php');
             exit;
         }
         
@@ -166,7 +166,7 @@ class User {
             } elseif (self::isAssistant()) {
                 header('Location: ' . APP_URL . '/assistant/index.php');
             } else {
-                header('Location: ' . APP_URL . '/pages/login.php');
+                header('Location: ' . APP_URL . '/login.php');
             }
             exit;
         }
