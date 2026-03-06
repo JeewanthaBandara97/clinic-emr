@@ -378,9 +378,50 @@ INSERT INTO roles (role_name, role_description) VALUES
 -- Insert default users (password: password123)
 -- Password hash generated using PHP password_hash('password123', PASSWORD_DEFAULT)
 INSERT INTO users (username, password_hash, email, full_name, role_id, phone, is_active) VALUES 
-('assistant', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'assistant@clinic.com', 'John Smith', 1, '1234567890', 1),
-('doctor', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'doctor@clinic.com', 'Dr. Sarah Johnson', 2, '0987654321', 1),
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@clinic.com', 'System Admin', 2, '1122334455', 1);
+('assistant', ' ', 'assistant@clinic.com', 'John Smith', 1, '1234567890', 1),
+('doctor', ' ', 'doctor@clinic.com', 'Dr. Sarah Johnson', 2, '0987654321', 1),
+('admin', ' ', 'admin@clinic.com', 'System Admin', 2, '1122334455', 1);
+
+
+
+-- =====================================================
+-- TABLE: doctor_details
+-- Stores additional details specific to doctors
+-- Linked to users table via user_id
+-- =====================================================
+CREATE TABLE doctor_details (
+    detail_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL UNIQUE,
+    specialization VARCHAR(150) NOT NULL,
+    qualification VARCHAR(255) NOT NULL,
+    license_number VARCHAR(50),
+    experience_years INT UNSIGNED DEFAULT 0,
+    consultation_fee DECIMAL(10,2) DEFAULT 0.00,
+    bio TEXT,
+    available_days VARCHAR(100) DEFAULT 'Mon,Tue,Wed,Thu,Fri',
+    available_time_start TIME DEFAULT '08:00:00',
+    available_time_end TIME DEFAULT '17:00:00',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_user (user_id),
+    INDEX idx_specialization (specialization),
+    INDEX idx_license (license_number),
+    
+    CONSTRAINT fk_doctor_detail_user 
+        FOREIGN KEY (user_id) 
+        REFERENCES users(user_id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insert doctor details for existing doctor user
+INSERT INTO doctor_details (user_id, specialization, qualification, license_number, experience_years, consultation_fee)
+SELECT user_id, 'General Medicine', 'MBBS', 'LIC-001', 5, 1500.00
+FROM users WHERE username = 'doctor' AND role_id = 2
+ON DUPLICATE KEY UPDATE specialization = 'General Medicine';
+
+
 
 -- =====================================================
 -- STORED PROCEDURES

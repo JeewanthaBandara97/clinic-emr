@@ -271,15 +271,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h6><i class="bi bi-info-circle me-1"></i>Demo Credentials</h6>
                     <div class="role-row">
                         <span class="role-badge admin"><i class="bi bi-shield-lock me-1"></i>Admin:</span>
-                        <span><code>admin</code> / <code>admin123</code></span>
+                        <span><code>admin</code> / <code>12345678</code></span>
                     </div>
                     <div class="role-row">
                         <span class="role-badge doctor"><i class="bi bi-heart-pulse me-1"></i>Doctor:</span>
-                        <span><code>doctor</code> / <code>password123</code></span>
+                        <span><code>doctor</code> / <code>12345678</code></span>
                     </div>
                     <div class="role-row">
                         <span class="role-badge assistant"><i class="bi bi-person-badge me-1"></i>Assistant:</span>
-                        <span><code>assistant</code> / <code>password123</code></span>
+                        <span><code>assistant</code> / <code>12345678</code></span>
                     </div>
                 </div>
             </div>
