@@ -20,6 +20,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
     <title><?php echo $pageTitle ?? APP_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"  ></script>
     <link href="<?php echo APP_URL; ?>/assets/css/style.css" rel="stylesheet">
 </head>
 <body>

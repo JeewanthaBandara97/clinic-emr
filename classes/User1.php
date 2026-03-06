@@ -125,7 +125,7 @@ class User {
      * Check if user has specific role
      */
     public static function hasRole(int $roleId): bool {
-        return isset($_SESSION['role_id']) && $_SESSION['role_id'] === $roleId;
+        return isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === $roleId;
     }
     
     /**
@@ -163,8 +163,10 @@ class User {
             $_SESSION['error'] = 'Access denied. Admin privileges required.';
             if (self::isDoctor()) {
                 header('Location: ' . APP_URL . '/doctor/index.php');
-            } else {
+            } elseif (self::isAssistant()) {
                 header('Location: ' . APP_URL . '/assistant/index.php');
+            } else {
+                header('Location: ' . APP_URL . '/pages/login.php');
             }
             exit;
         }
@@ -188,7 +190,7 @@ class User {
     }
     
     // ================================================================
-    //  DOCTOR METHODS (existing + admin extensions)
+    //  DOCTOR METHODS
     // ================================================================
     
     /**
@@ -233,7 +235,7 @@ class User {
     }
     
     // ================================================================
-    //  ASSISTANT METHODS (admin panel)
+    //  ASSISTANT METHODS
     // ================================================================
     
     /**
@@ -267,7 +269,7 @@ class User {
     }
     
     // ================================================================
-    //  GENERIC USER CRUD (admin panel)
+    //  USER CRUD (admin panel)
     // ================================================================
     
     /**
@@ -293,7 +295,7 @@ class User {
     }
     
     /**
-     * Check if username already exists (optionally exclude a user ID)
+     * Check if username already exists
      */
     public function usernameExists(string $username, ?int $excludeUserId = null): bool {
         if ($excludeUserId) {
@@ -307,12 +309,10 @@ class User {
     }
     
     /**
-     * Check if email already exists (optionally exclude a user ID)
+     * Check if email already exists
      */
     public function emailExists(string $email, ?int $excludeUserId = null): bool {
-        if (empty($email)) {
-            return false;
-        }
+        if (empty($email)) return false;
         if ($excludeUserId) {
             $sql = "SELECT user_id FROM users WHERE email = ? AND user_id != ?";
             $result = $this->db->fetchOne($sql, [$email, $excludeUserId]);
@@ -342,7 +342,7 @@ class User {
     }
     
     /**
-     * Update an existing user (without changing password)
+     * Update user without password change
      */
     public function updateUser(int $userId, array $data): bool {
         $sql = "UPDATE users 
@@ -380,26 +380,16 @@ class User {
     }
     
     /**
-     * Toggle user active status
+     * Toggle user active status (prevents deactivating admins)
      */
     public function updateUserStatus(int $userId, int $status): bool {
         $sql = "UPDATE users SET is_active = ? WHERE user_id = ? AND role_id != ?";
         return $this->db->update($sql, [$status, $userId, ROLE_ADMIN]);
     }
     
-    /**
-     * Get total user count by role
-     */
-    public function getUserCountByRole(?int $roleId = null): int {
-        if ($roleId !== null) {
-            $sql = "SELECT COUNT(*) as total FROM users WHERE role_id = ?";
-            $result = $this->db->fetchOne($sql, [$roleId]);
-        } else {
-            $sql = "SELECT COUNT(*) as total FROM users";
-            $result = $this->db->fetchOne($sql);
-        }
-        return $result ? (int)$result['total'] : 0;
-    }
+    // ================================================================
+    //  DASHBOARD STATISTICS (using correct table names)
+    // ================================================================
     
     /**
      * Get recent users (for admin dashboard)
@@ -415,30 +405,75 @@ class User {
     }
     
     /**
-     * Get today's session count (for admin dashboard)
+     * Get today's session count
+     * ★ Uses clinic_sessions (NOT 'sessions')
      */
     public function getTodaySessionCount(): int {
-        $sql = "SELECT COUNT(*) as total FROM sessions WHERE DATE(session_date) = CURDATE()";
-        $result = $this->db->fetchOne($sql);
-        return $result ? (int)$result['total'] : 0;
+        try {
+            $sql = "SELECT COUNT(*) as total FROM clinic_sessions WHERE session_date = CURDATE()";
+            $result = $this->db->fetchOne($sql);
+            return $result ? (int)$result['total'] : 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
     
     /**
-     * Get today's patient count (for admin dashboard)
+     * Get today's patient count
      */
     public function getTodayPatientCount(): int {
-        $sql = "SELECT COUNT(*) as total FROM patients WHERE DATE(created_at) = CURDATE()";
-        $result = $this->db->fetchOne($sql);
-        return $result ? (int)$result['total'] : 0;
+        try {
+            $sql = "SELECT COUNT(*) as total FROM patients WHERE DATE(created_at) = CURDATE()";
+            $result = $this->db->fetchOne($sql);
+            return $result ? (int)$result['total'] : 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
     
     /**
      * Get total patient count
      */
     public function getTotalPatientCount(): int {
-        $sql = "SELECT COUNT(*) as total FROM patients";
-        $result = $this->db->fetchOne($sql);
-        return $result ? (int)$result['total'] : 0;
+        try {
+            $sql = "SELECT COUNT(*) as total FROM patients";
+            $result = $this->db->fetchOne($sql);
+            return $result ? (int)$result['total'] : 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+    
+    /**
+     * Get today's visit count
+     */
+    public function getTodayVisitCount(): int {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM visits WHERE visit_date = CURDATE()";
+            $result = $this->db->fetchOne($sql);
+            return $result ? (int)$result['total'] : 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+    
+    /**
+     * Get today's sessions with doctor info (for admin dashboard)
+     * ★ Uses clinic_sessions (NOT 'sessions')
+     */
+    public function getTodaySessionsAdmin(): array {
+        try {
+            $sql = "SELECT cs.*, u.full_name AS doctor_name,
+                           (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id) AS total_patients,
+                           (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id AND sp.status = 'Waiting') AS waiting_count
+                    FROM clinic_sessions cs
+                    JOIN users u ON cs.doctor_id = u.user_id
+                    WHERE cs.session_date = CURDATE()
+                    ORDER BY cs.start_time ASC";
+            return $this->db->fetchAll($sql);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
     
     /**
@@ -458,133 +493,4 @@ class User {
             $_SERVER['HTTP_USER_AGENT'] ?? null
         ]);
     }
-
-    // ================================================================
-    //  DOCTOR DETAILS METHODS
-    // ================================================================
-    
-    /**
-     * Get doctor details by user_id
-     */
-    public function getDoctorDetails(int $userId): ?array {
-        $sql = "SELECT dd.*, u.full_name, u.username, u.email, u.phone, u.is_active, u.last_login, u.created_at as user_created_at
-                FROM doctor_details dd
-                RIGHT JOIN users u ON dd.user_id = u.user_id
-                WHERE u.user_id = ? AND u.role_id = ?";
-        return $this->db->fetchOne($sql, [$userId, ROLE_DOCTOR]);
-    }
-    
-    /**
-     * Get all doctors with their details (for admin panel)
-     */
-    public function getAllDoctorsWithDetails(): array {
-        $sql = "SELECT u.user_id, u.full_name, u.username, u.email, u.phone,
-                       u.is_active, u.created_at, u.last_login,
-                       dd.specialization, dd.qualification, dd.license_number,
-                       dd.experience_years, dd.consultation_fee, dd.available_days,
-                       dd.available_time_start, dd.available_time_end, dd.bio
-                FROM users u
-                LEFT JOIN doctor_details dd ON u.user_id = dd.user_id
-                WHERE u.role_id = ?
-                ORDER BY u.created_at DESC";
-        return $this->db->fetchAll($sql, [ROLE_DOCTOR]);
-    }
-    
-    /**
-     * Save doctor details (insert or update)
-     */
-    public function saveDoctorDetails(int $userId, array $data): bool {
-        // Check if details already exist
-        $existing = $this->db->fetchOne(
-            "SELECT detail_id FROM doctor_details WHERE user_id = ?", 
-            [$userId]
-        );
-        
-        if ($existing) {
-            // Update
-            $sql = "UPDATE doctor_details 
-                    SET specialization = ?, qualification = ?, license_number = ?,
-                        experience_years = ?, consultation_fee = ?, bio = ?,
-                        available_days = ?, available_time_start = ?, available_time_end = ?
-                    WHERE user_id = ?";
-            return $this->db->update($sql, [
-                $data['specialization'],
-                $data['qualification'],
-                $data['license_number'] ?? null,
-                $data['experience_years'] ?? 0,
-                $data['consultation_fee'] ?? 0,
-                $data['bio'] ?? null,
-                $data['available_days'] ?? 'Mon,Tue,Wed,Thu,Fri',
-                $data['available_time_start'] ?? '08:00:00',
-                $data['available_time_end'] ?? '17:00:00',
-                $userId
-            ]) >= 0;
-        } else {
-            // Insert
-            $sql = "INSERT INTO doctor_details 
-                    (user_id, specialization, qualification, license_number, 
-                     experience_years, consultation_fee, bio,
-                     available_days, available_time_start, available_time_end)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            return $this->db->insert($sql, [
-                $userId,
-                $data['specialization'],
-                $data['qualification'],
-                $data['license_number'] ?? null,
-                $data['experience_years'] ?? 0,
-                $data['consultation_fee'] ?? 0,
-                $data['bio'] ?? null,
-                $data['available_days'] ?? 'Mon,Tue,Wed,Thu,Fri',
-                $data['available_time_start'] ?? '08:00:00',
-                $data['available_time_end'] ?? '17:00:00'
-            ]) > 0;
-        }
-    }
-    
-    /**
-     * Delete doctor details
-     */
-    public function deleteDoctorDetails(int $userId): bool {
-        $sql = "DELETE FROM doctor_details WHERE user_id = ?";
-        return $this->db->delete($sql, [$userId]) >= 0;
-    }
-
- 
- 
-  
-    /**
-     * Get today's visit count
-     */
-    public function getTodayVisitCount(): int {
-        try {
-            $sql = "SELECT COUNT(*) as total FROM visits WHERE visit_date = CURDATE()";
-            $result = $this->db->fetchOne($sql);
-            return $result ? (int)$result['total'] : 0;
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-    
-    
- 
-    /**
-     * Get today's sessions with doctor info (for admin dashboard)
-     */
-    public function getTodaySessionsAdmin(): array {
-        try {
-            $sql = "SELECT cs.*, u.full_name AS doctor_name,
-                           (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id) AS total_patients,
-                           (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id AND sp.status = 'Waiting') AS waiting_count
-                    FROM clinic_sessions cs
-                    JOIN users u ON cs.doctor_id = u.user_id
-                    WHERE cs.session_date = CURDATE()
-                    ORDER BY cs.start_time ASC";
-            return $this->db->fetchAll($sql);
-        } catch (\Exception $e) {
-            return [];
-        }
-    }
-
-
-
 }

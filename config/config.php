@@ -46,5 +46,6 @@ define('SESSION_TIMEOUT', 3600); // 1 hour
 define('MIN_PASSWORD_LENGTH', 8);
 
 // Role IDs
-define('ROLE_ASSISTANT', 1);
-define('ROLE_DOCTOR', 2);
+define('ROLE_ADMIN', 1); 
+define('ROLE_DOCTOR', 2); 
+define('ROLE_ASSISTANT', 3);

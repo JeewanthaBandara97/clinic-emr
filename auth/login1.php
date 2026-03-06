@@ -18,9 +18,7 @@ require_once __DIR__ . '/../includes/csrf.php';
 
 // Redirect if already logged in
 if (User::isLoggedIn()) {
-    if (User::isAdmin()) {
-        header('Location: ' . APP_URL . '/admin/index.php');
-    } elseif (User::isDoctor()) {
+    if (User::isDoctor()) {
         header('Location: ' . APP_URL . '/doctor/index.php');
     } else {
         header('Location: ' . APP_URL . '/assistant/index.php');
@@ -54,8 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 if ($redirectUrl) {
                     header('Location: ' . $redirectUrl);
-                } elseif (User::isAdmin()) {
-                    header('Location: ' . APP_URL . '/admin/index.php');
                 } elseif (User::isDoctor()) {
                     header('Location: ' . APP_URL . '/doctor/index.php');
                 } else {
@@ -192,30 +188,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 4px;
             color: #334155;
         }
-        
-        .demo-credentials .role-row {
-            display: flex;
-            align-items: center;
-            padding: 4px 0;
-        }
-        
-        .demo-credentials .role-badge {
-            display: inline-block;
-            width: 70px;
-            font-weight: 600;
-        }
-        
-        .demo-credentials .role-badge.admin {
-            color: #dc2626;
-        }
-        
-        .demo-credentials .role-badge.doctor {
-            color: #2563eb;
-        }
-        
-        .demo-credentials .role-badge.assistant {
-            color: #16a34a;
-        }
     </style>
 </head>
 <body>
@@ -240,12 +212,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endif; ?>
                 
-                <?php if (isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle me-2"></i><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
-                    </div>
-                <?php endif; ?>
-                
                 <form method="POST" action="" autocomplete="off">
                     <?php echo csrfField(); ?>
                     
@@ -258,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="form-floating">
                         <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="Password" required value="12345678">
+                               placeholder="Password" required>
                         <label for="password"><i class="bi bi-lock me-2"></i>Password</label>
                     </div>
                     
@@ -269,18 +235,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="demo-credentials">
                     <h6><i class="bi bi-info-circle me-1"></i>Demo Credentials</h6>
-                    <div class="role-row">
-                        <span class="role-badge admin"><i class="bi bi-shield-lock me-1"></i>Admin:</span>
-                        <span><code>admin</code> / <code>admin123</code></span>
-                    </div>
-                    <div class="role-row">
-                        <span class="role-badge doctor"><i class="bi bi-heart-pulse me-1"></i>Doctor:</span>
-                        <span><code>doctor</code> / <code>password123</code></span>
-                    </div>
-                    <div class="role-row">
-                        <span class="role-badge assistant"><i class="bi bi-person-badge me-1"></i>Assistant:</span>
-                        <span><code>assistant</code> / <code>password123</code></span>
-                    </div>
+                    <p class="mb-1"><strong>Assistant:</strong> <code>assistant</code> / <code>password123</code></p>
+                    <p class="mb-0"><strong>Doctor:</strong> <code>doctor</code> / <code>password123</code></p>
                 </div>
             </div>
         </div>
