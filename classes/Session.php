@@ -163,4 +163,221 @@ class ClinicSession {
             'new_patients' => 0
         ];
     }
+ 
+    
+    // ... (keep all existing methods) ...
+    
+    /**
+     * Get all sessions with optional filters
+     */
+    public function getAllSessions(?string $date = null, ?string $doctorId = null, ?string $status = null): array {
+        $sql = "SELECT cs.*, 
+                    u.full_name as doctor_name,
+                    (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id) as total_patients,
+                    (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id AND sp.status = 'Waiting') as waiting_count,
+                    (SELECT COUNT(*) FROM session_patients sp WHERE sp.session_id = cs.session_id AND sp.status = 'Completed') as completed_count
+                FROM clinic_sessions cs
+                JOIN users u ON cs.doctor_id = u.user_id
+                WHERE 1=1";
+        
+        $params = [];
+        
+        if (!empty($date)) {
+            $sql .= " AND cs.session_date >= ?";
+            $params[] = $date;
+        }
+        
+        if (!empty($doctorId)) {
+            $sql .= " AND cs.doctor_id = ?";
+            $params[] = (int)$doctorId;
+        }
+        
+        if (!empty($status)) {
+            $sql .= " AND cs.status = ?";
+            $params[] = $status;
+        }
+        
+        $sql .= " ORDER BY cs.session_date DESC, cs.start_time DESC";
+        
+        return $this->db->fetchAll($sql, $params);
+    }
+    
+    /**
+     * Delete a session (only if no patients)
+     */
+    public function deleteSession(int $sessionId): array {
+        // First check if session has any patients
+        $sql = "SELECT COUNT(*) as count FROM session_patients WHERE session_id = ?";
+        $result = $this->db->fetchOne($sql, [$sessionId]);
+        
+        if ($result['count'] > 0) {
+            return [
+                'success' => false,
+                'message' => 'Cannot delete session - it has ' . $result['count'] . ' patient(s) in queue. Remove patients first.'
+            ];
+        }
+        
+        // Check if session exists
+        $session = $this->getById($sessionId);
+        if (!$session) {
+            return [
+                'success' => false,
+                'message' => 'Session not found.'
+            ];
+        }
+        
+        // Delete the session
+        try {
+            $sql = "DELETE FROM clinic_sessions WHERE session_id = ?";
+            $deleted = $this->db->delete($sql, [$sessionId]);
+            
+            if ($deleted > 0) {
+                return [
+                    'success' => true,
+                    'message' => 'Session deleted successfully.'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Failed to delete session.'
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error deleting session: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    /**
+     * Remove patient from queue
+     */
+    public function removePatientFromQueue(int $sessionId, int $patientId): bool {
+        try {
+            $sql = "DELETE FROM session_patients WHERE session_id = ? AND patient_id = ?";
+            $deleted = $this->db->delete($sql, [$sessionId, $patientId]);
+            return $deleted > 0;
+        } catch (Exception $e) {
+            error_log("Error removing patient from queue: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Update session status
+     */
+    public function updateStatus(int $sessionId, string $status): bool {
+        try {
+            $sql = "UPDATE clinic_sessions SET status = ?, updated_at = NOW() WHERE session_id = ?";
+            $updated = $this->db->update($sql, [$status, $sessionId]);
+            return $updated > 0;
+        } catch (Exception $e) {
+            error_log("Error updating session status: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Get session statistics
+     */
+    public function getSessionStats(int $sessionId): array {
+        $sql = "SELECT 
+                    COUNT(*) as total,
+                    SUM(CASE WHEN status = 'Waiting' THEN 1 ELSE 0 END) as waiting,
+                    SUM(CASE WHEN status = 'In Progress' THEN 1 ELSE 0 END) as in_progress,
+                    SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) as completed,
+                    SUM(CASE WHEN status = 'No Show' THEN 1 ELSE 0 END) as no_show,
+                    SUM(CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled
+                FROM session_patients 
+                WHERE session_id = ?";
+        
+        $result = $this->db->fetchOne($sql, [$sessionId]);
+        
+        return $result ?: [
+            'total' => 0,
+            'waiting' => 0,
+            'in_progress' => 0,
+            'completed' => 0,
+            'no_show' => 0,
+            'cancelled' => 0
+        ];
+    }
+    
+    /**
+     * Bulk delete empty sessions
+     */
+    public function deleteEmptySessions(?string $beforeDate = null): int {
+        $sql = "DELETE FROM clinic_sessions 
+                WHERE session_id NOT IN (
+                    SELECT DISTINCT session_id FROM session_patients
+                )";
+        
+        $params = [];
+        
+        if ($beforeDate) {
+            $sql .= " AND session_date < ?";
+            $params[] = $beforeDate;
+        }
+        
+        return $this->db->delete($sql, $params);
+    }
+
+    /**
+     * Move patient up or down in queue
+     */
+    public function movePatientInQueue(int $sessionId, int $patientId, string $direction): bool {
+        try {
+            // Get current patient's queue info
+            $sql = "SELECT id, queue_number FROM session_patients 
+                    WHERE session_id = ? AND patient_id = ? AND status = 'Waiting'";
+            $current = $this->db->fetchOne($sql, [$sessionId, $patientId]);
+            
+            if (!$current) {
+                return false;
+            }
+            
+            $currentQueueNum = $current['queue_number'];
+            
+            // Find adjacent patient to swap with
+            if ($direction === 'up') {
+                $sql = "SELECT id, patient_id, queue_number FROM session_patients 
+                        WHERE session_id = ? AND queue_number < ? AND status = 'Waiting'
+                        ORDER BY queue_number DESC LIMIT 1";
+            } else {
+                $sql = "SELECT id, patient_id, queue_number FROM session_patients 
+                        WHERE session_id = ? AND queue_number > ? AND status = 'Waiting'
+                        ORDER BY queue_number ASC LIMIT 1";
+            }
+            
+            $adjacent = $this->db->fetchOne($sql, [$sessionId, $currentQueueNum]);
+            
+            if (!$adjacent) {
+                return false; // No adjacent patient to swap with
+            }
+            
+            // Swap queue numbers
+            $this->db->beginTransaction();
+            
+            // Update current patient
+            $sql = "UPDATE session_patients SET queue_number = ? WHERE id = ?";
+            $this->db->update($sql, [$adjacent['queue_number'], $current['id']]);
+            
+            // Update adjacent patient
+            $sql = "UPDATE session_patients SET queue_number = ? WHERE id = ?";
+            $this->db->update($sql, [$currentQueueNum, $adjacent['id']]);
+            
+            $this->db->commit();
+            return true;
+            
+        } catch (Exception $e) {
+            $this->db->rollback();
+            error_log("Error moving patient in queue: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
 }
+ 
+ 

@@ -1,0 +1,54 @@
+/* Fix dropdown z-index in tables */
+.table-responsive {
+    overflow: visible !important;
+}
+
+.table .dropdown-menu {
+    z-index: 1050;
+}
+
+.table .btn-group {
+    position: static;
+}
+
+.table td {
+    position: relative;
+}
+
+/* Alternative: If table needs scroll, use this instead */
+.table-responsive .dropdown-menu {
+    position: fixed !important;
+}
+
+
+/* Fix dropdown flickering in queue table */
+.queue-row {
+    transition: background-color 0.2s ease;
+    /* Remove transform that causes flickering */
+    /* transform: translateX(5px); -- REMOVE THIS */
+}
+
+.queue-row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    /* Don't use transform on hover */
+}
+
+/* Fix dropdown position in table */
+.table .dropdown {
+    position: static;
+}
+
+.table .dropdown-menu {
+    z-index: 1050;
+    position: absolute !important;
+}
+
+/* Prevent flickering on dropdown toggle */
+.dropdown-toggle::after {
+    transition: none;
+}
+
+.btn-group > .btn:focus,
+.btn-group > .btn:active {
+    box-shadow: none;
+}
