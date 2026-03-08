@@ -35,241 +35,231 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
     <title><?php echo $pageTitle; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        /* Print Styles */
+        <style>
         @page {
             size: A4;
-            margin: 15mm;
+            margin: 10mm;
         }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 12pt;
-            line-height: 1.4;
+            font-size: 11pt;
+            line-height: 1.35;
             background: #f5f5f5;
+            color: #111;
         }
-        
         .prescription-wrapper {
             max-width: 210mm;
             margin: 20px auto;
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background: #fff;
+            box-shadow: 0 0 12px rgba(0,0,0,0.08);
         }
-        
         .prescription-page {
-            padding: 20mm;
-            min-height: 297mm;
+            padding: 12mm;
+            min-height: 277mm;
             position: relative;
         }
-        
-        /* Header */
+        .prescription-page + .prescription-page {
+            margin-top: 16px;
+        }
+        .page-break {
+            page-break-before: always;
+            break-before: page;
+        }
         .prescription-header {
-            border-bottom: 3px solid #2563eb;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #222;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
         }
-        
         .clinic-name {
-            font-size: 24pt;
-            font-weight: bold;
-            color: #2563eb;
+            font-size: 21pt;
+            font-weight: 700;
+            color: #111;
             margin: 0;
+            line-height: 1.1;
         }
-        
         .clinic-info {
-            font-size: 10pt;
-            color: #666;
+            font-size: 9.5pt;
+            color: #333;
         }
-        
         .doctor-info {
             text-align: right;
         }
-        
         .doctor-name {
-            font-size: 14pt;
+            font-size: 12pt;
             font-weight: 600;
-            color: #333;
+            color: #111;
         }
-        
-        /* Patient Info */
         .patient-section {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+            border: 1px solid #cfcfcf;
+            border-radius: 0;
+            padding: 10px;
+            margin-bottom: 12px;
         }
-        
         .patient-section table {
             width: 100%;
-            font-size: 11pt;
+            font-size: 10pt;
         }
-        
         .patient-section td {
-            padding: 3px 10px 3px 0;
+            padding: 2px 8px 2px 0;
         }
-        
         .patient-section .label {
             font-weight: 600;
-            color: #555;
+            color: #222;
             width: 100px;
         }
-        
-        /* Diagnosis Section */
         .diagnosis-section {
-            margin-bottom: 20px;
-            padding: 10px 0;
-            border-bottom: 1px dashed #ddd;
+            margin-bottom: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid #cfcfcf;
         }
-        
         .section-title {
-            font-weight: 600;
-            color: #2563eb;
-            font-size: 11pt;
+            font-weight: 700;
+            color: #111;
+            font-size: 10pt;
             margin-bottom: 5px;
             text-transform: uppercase;
         }
-        
-        /* Rx Symbol */
-        .rx-symbol {
-            font-size: 36pt;
-            font-weight: bold;
-            color: #2563eb;
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-        
-        /* Medicine Table */
         .medicine-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
-        
         .medicine-table th {
-            background: #2563eb;
-            color: white;
-            padding: 10px;
+            background: #fff;
+            color: #111;
+            padding: 7px;
             text-align: left;
-            font-size: 10pt;
-            font-weight: 600;
+            font-size: 9.5pt;
+            font-weight: 700;
+            border-top: 1px solid #777;
+            border-bottom: 1px solid #777;
         }
-        
         .medicine-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+            padding: 7px;
+            border-bottom: 1px solid #d7d7d7;
             vertical-align: top;
+            font-size: 9.5pt;
         }
-        
-        .medicine-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        
         .medicine-name {
             font-weight: 600;
+            color: #111;
+        }
+        .medicine-details {
+            font-size: 9pt;
             color: #333;
         }
-        
-        .medicine-details {
-            font-size: 10pt;
-            color: #666;
-        }
-        
-        /* Tests Section */
         .tests-section {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+            border: 1px solid #cfcfcf;
+            border-radius: 0;
+            padding: 10px;
+            margin-bottom: 12px;
         }
-        
         .tests-section .section-title {
-            color: #856404;
+            color: #111;
         }
-        
         .test-item {
             display: inline-block;
-            background: white;
-            padding: 5px 12px;
+            padding: 4px 10px;
             margin: 3px;
-            border-radius: 20px;
-            font-size: 10pt;
-            border: 1px solid #ffc107;
+            border-radius: 0;
+            font-size: 9.5pt;
+            border: 1px solid #bdbdbd;
         }
-        
-        /* Footer */
         .prescription-footer {
-            position: absolute;
-            bottom: 20mm;
-            left: 20mm;
-            right: 20mm;
-            border-top: 2px solid #2563eb;
-            padding-top: 15px;
+            border-top: 1px solid #777;
+            margin-top: 14px;
+            padding-top: 8px;
+            page-break-inside: avoid;
         }
-        
         .signature-area {
             float: right;
             text-align: center;
             width: 200px;
         }
-        
         .signature-line {
             border-top: 1px solid #333;
-            margin-top: 50px;
+            margin-top: 40px;
             padding-top: 5px;
             font-size: 10pt;
         }
-        
-        /* Print Button */
         .print-controls {
             text-align: center;
             padding: 20px;
             background: #333;
         }
-        
-        @media print {
-            body {
-                background: white;
-            }
-            
-            .prescription-wrapper {
-                box-shadow: none;
-                margin: 0;
-            }
-            
-            .print-controls {
-                display: none !important;
-            }
-            
-            .prescription-page {
-                padding: 0;
-            }
-        }
-        
-        /* Vital Signs */
         .vitals-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 12px;
         }
-        
         .vital-item {
-            background: #e7f1ff;
-            padding: 10px;
-            border-radius: 8px;
+            border: 1px solid #cfcfcf;
+            padding: 8px 6px;
+            border-radius: 0;
             text-align: center;
         }
-        
         .vital-value {
-            font-size: 16pt;
+            font-size: 13pt;
             font-weight: 600;
-            color: #2563eb;
+            color: #111;
         }
-        
         .vital-label {
-            font-size: 9pt;
-            color: #666;
+            font-size: 8.5pt;
+            color: #333;
+        }
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+            .prescription-wrapper {
+                box-shadow: none;
+                margin: 0;
+                max-width: none;
+            }
+            .print-controls,
+            .bi {
+                display: none !important;
+            }
+            .prescription-page {
+                padding: 0;
+                min-height: auto;
+            }
+            .prescription-page + .prescription-page {
+                margin-top: 0;
+            }
+            .badge {
+                border: 1px solid #666 !important;
+                color: #111 !important;
+                background: #fff !important;
+            }
+            .row,
+            .col-6,
+            .col-5,
+            .col-7,
+            .medicine-table,
+            .tests-section,
+            .patient-section,
+            .diagnosis-section,
+            .vitals-grid,
+            .prescription-footer {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            a,
+            a:visited {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .page-break {
+                page-break-before: always;
+                break-before: page;
+            }
         }
     </style>
 </head>
@@ -285,6 +275,7 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
     </div>
     
     <div class="prescription-wrapper">
+        <!-- Page 1: Clinical Summary -->
         <div class="prescription-page">
             <!-- Header -->
             <div class="prescription-header">
@@ -300,7 +291,7 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
                     <div class="col-5 doctor-info">
                         <div class="doctor-name"><?php echo htmlspecialchars($prescription['doctor_name']); ?></div>
                         <div class="clinic-info">
-                            Medical Practitioner<br>
+                            <?php echo !empty($prescription['qualification']) ? htmlspecialchars($prescription['qualification']) : 'Medical Practitioner'; ?><br>
                             Date: <?php echo formatDate($prescription['prescription_date']); ?>
                         </div>
                     </div>
@@ -365,7 +356,7 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
                     <?php endif; ?>
                     <?php if ($vitals['temperature']): ?>
                         <div class="vital-item">
-                            <div class="vital-value"><?php echo $vitals['temperature']; ?>°C</div>
+                            <div class="vital-value"><?php echo $vitals['temperature']; ?> &deg;C</div>
                             <div class="vital-label">Temperature</div>
                         </div>
                     <?php endif; ?>
@@ -378,6 +369,14 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
                 </div>
             <?php endif; ?>
             
+            <!-- Symptoms / Chief Complaint -->
+            <?php if (!empty($prescription['symptoms'])): ?>
+                <div class="diagnosis-section">
+                    <div class="section-title"><i class="bi bi-bug me-1"></i>Symptoms / Chief Complaint</div>
+                    <p style="margin:0;"><?php echo nl2br(htmlspecialchars($prescription['symptoms'])); ?></p>
+                </div>
+            <?php endif; ?>
+
             <!-- Diagnosis -->
             <?php if ($prescription['diagnosis']): ?>
                 <div class="diagnosis-section">
@@ -385,11 +384,88 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
                     <p style="margin:0;"><?php echo nl2br(htmlspecialchars($prescription['diagnosis'])); ?></p>
                 </div>
             <?php endif; ?>
+
+            <!-- Clinical Notes -->
+            <?php if (!empty($prescription['clinical_notes'])): ?>
+                <div class="mb-4">
+                    <div class="section-title"><i class="bi bi-journal-medical me-1"></i>Clinical Notes</div>
+                    <p class="mb-0"><?php echo nl2br(htmlspecialchars($prescription['clinical_notes'])); ?></p>
+                </div>
+            <?php endif; ?>
+
+            <!-- Prescription Notes -->
+            <?php if (!empty($prescription['notes'])): ?>
+                <div class="mb-4">
+                    <div class="section-title"><i class="bi bi-info-circle me-1"></i>Prescription Notes</div>
+                    <p class="mb-0"><?php echo nl2br(htmlspecialchars($prescription['notes'])); ?></p>
+                </div>
+            <?php endif; ?>
+
+            <!-- Follow-up Date -->
+            <div class="diagnosis-section">
+                <div class="section-title"><i class="bi bi-calendar-check me-1"></i>Follow-up Date</div>
+                <p style="margin:0;">
+                    <?php echo !empty($prescription['follow_up_date']) ? date('d M Y', strtotime($prescription['follow_up_date'])) : 'Not specified'; ?>
+                </p>
+            </div>
             
+            <!-- Footer -->
+            <div class="prescription-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar me-1"></i>Printed: <?php echo date('d M Y, h:i A'); ?><br>
+                            <i class="bi bi-shield-check me-1"></i>This is a computer generated prescription
+                        </small>
+                    </div>
+                    <div class="col-6">
+                        <div class="signature-area">
+                            <div class="signature-line">
+                                <?php echo htmlspecialchars($prescription['doctor_name']); ?><br>
+                                <small>Doctor's Signature</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Medicines and Tests -->
+        <div class="prescription-page page-break">
+            <div class="prescription-header">
+                <div class="row align-items-center">
+                    <div class="col-7">
+                        <h1 class="clinic-name"><?php echo CLINIC_NAME; ?></h1>
+                        <div class="clinic-info">
+                            <?php echo CLINIC_ADDRESS; ?><br>
+                            <?php echo CLINIC_PHONE; ?> | <?php echo CLINIC_EMAIL; ?>
+                        </div>
+                    </div>
+                    <div class="col-5 doctor-info">
+                        <div class="doctor-name"><?php echo htmlspecialchars($prescription['doctor_name']); ?></div>
+                        <div class="clinic-info">
+                            <?php echo !empty($prescription['qualification']) ? htmlspecialchars($prescription['qualification']) : 'Medical Practitioner'; ?><br>
+                            Rx: <?php echo htmlspecialchars($prescription['prescription_code']); ?><br>
+                            Date: <?php echo formatDate($prescription['prescription_date']); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="patient-section">
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Patient:</strong> <?php echo htmlspecialchars($prescription['patient_name']); ?>
+                    </div>
+                    <div class="col-6 text-end">
+                        <strong>Patient ID:</strong> <?php echo htmlspecialchars($prescription['patient_code']); ?>
+                    </div>
+                </div>
+            </div>
+
             <!-- Prescription Medicines -->
             <?php if (!empty($prescription['medicines'])): ?>
-                <div class="rx-symbol">℞</div>
-                
+                <div class="section-title mb-2"><i class="bi bi-capsule me-1"></i>Medicines</div>
                 <table class="medicine-table">
                     <thead>
                         <tr>
@@ -407,57 +483,59 @@ $pageTitle = 'Prescription - ' . $prescription['prescription_code'];
                                 <td><?php echo $index + 1; ?></td>
                                 <td>
                                     <span class="medicine-name"><?php echo htmlspecialchars($medicine['medicine_name']); ?></span>
-                                    <?php if ($medicine['route'] && $medicine['route'] !== 'Oral'): ?>
-                                        <br><span class="medicine-details">(<?php echo $medicine['route']; ?>)</span>
+                                    <?php if (!empty($medicine['route']) && $medicine['route'] !== 'Oral'): ?>
+                                        <br><span class="medicine-details">(<?php echo htmlspecialchars($medicine['route']); ?>)</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo htmlspecialchars($medicine['dose']); ?></td>
                                 <td><?php echo htmlspecialchars($medicine['frequency']); ?></td>
-                                <td><?php echo $medicine['duration_days']; ?> days</td>
+                                <td><?php echo (int)$medicine['duration_days']; ?> days</td>
                                 <td class="medicine-details"><?php echo htmlspecialchars($medicine['instructions']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            <?php else: ?>
+                <p class="text-muted">No medicines prescribed.</p>
             <?php endif; ?>
-            
+
             <!-- Tests Requested -->
             <?php if (!empty($prescription['tests'])): ?>
                 <div class="tests-section">
                     <div class="section-title"><i class="bi bi-clipboard-check me-1"></i>Tests Requested</div>
                     <?php foreach ($prescription['tests'] as $test): ?>
                         <span class="test-item">
-                            <i class="bi bi-arrow-right-circle me-1"></i>
                             <?php echo htmlspecialchars($test['test_name']); ?>
-                            <?php if ($test['urgency'] !== 'Routine'): ?>
-                                <span class="badge bg-danger"><?php echo $test['urgency']; ?></span>
+                            <?php if (!empty($test['urgency']) && $test['urgency'] !== 'Routine'): ?>
+                                <span class="badge bg-danger"><?php echo htmlspecialchars($test['urgency']); ?></span>
                             <?php endif; ?>
                         </span>
                     <?php endforeach; ?>
                 </div>
+            <?php else: ?>
+                <p class="text-muted">No tests requested.</p>
             <?php endif; ?>
-            
-            <!-- Notes -->
-            <?php if ($prescription['notes']): ?>
-                <div class="mb-4">
-                    <div class="section-title"><i class="bi bi-info-circle me-1"></i>Notes & Advice</div>
-                    <p><?php echo nl2br(htmlspecialchars($prescription['notes'])); ?></p>
-                </div>
-            <?php endif; ?>
-            
-            <!-- Footer -->
+
             <div class="prescription-footer">
                 <div class="row">
-                    <div class="col-6">
-                        <small class="text-muted">
-                            <i class="bi bi-calendar me-1"></i>Printed: <?php echo date('d M Y, h:i A'); ?><br>
-                            <i class="bi bi-shield-check me-1"></i>This is a computer generated prescription
+                    <div class="col-7">
+                        <small class="text-muted d-block">
+                            Printed: <?php echo date('d M Y, h:i A'); ?>
                         </small>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                         <div class="signature-area">
                             <div class="signature-line">
                                 <?php echo htmlspecialchars($prescription['doctor_name']); ?><br>
+                                <small class="text-muted d-block mt-1">
+                                    Specialization: <?php echo !empty($prescription['specialization']) ? htmlspecialchars($prescription['specialization']) : '-'; ?>
+                                </small>
+                                <small class="text-muted d-block">
+                                    Qualification: <?php echo !empty($prescription['qualification']) ? htmlspecialchars($prescription['qualification']) : '-'; ?>
+                                </small>
+                                <small class="text-muted d-block">
+                                    License No: <?php echo !empty($prescription['license_number']) ? htmlspecialchars($prescription['license_number']) : '-'; ?>
+                                </small>
                                 <small>Doctor's Signature</small>
                             </div>
                         </div>

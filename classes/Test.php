@@ -17,7 +17,7 @@ class Test {
      * Create test request
      */
     public function create(array $data): int {
-        $sql = "INSERT INTO tests (
+        $sql = "INSERT INTO patient_tests (
                     visit_id, patient_id, test_name, test_type,
                     instructions, urgency, status
                 ) VALUES (?, ?, ?, ?, ?, ?, 'Requested')";
@@ -59,7 +59,7 @@ class Test {
      * Get tests by visit ID
      */
     public function getByVisitId(int $visitId): array {
-        $sql = "SELECT * FROM tests WHERE visit_id = ? ORDER BY requested_at DESC";
+        $sql = "SELECT * FROM patient_tests WHERE visit_id = ? ORDER BY requested_at DESC";
         return $this->db->fetchAll($sql, [$visitId]);
     }
     
@@ -68,8 +68,8 @@ class Test {
      */
     public function getByPatientId(int $patientId, int $limit = 20): array {
         $sql = "SELECT t.*, v.visit_date 
-                FROM tests t
-                JOIN visits v ON t.visit_id = v.visit_id
+                FROM patient_tests t
+                JOIN patient_visits v ON t.visit_id = v.visit_id
                 WHERE t.patient_id = ?
                 ORDER BY t.requested_at DESC
                 LIMIT ?";
@@ -80,7 +80,7 @@ class Test {
      * Update test status
      */
     public function updateStatus(int $testId, string $status, ?string $result = null): bool {
-        $sql = "UPDATE tests SET status = ?";
+        $sql = "UPDATE patient_tests SET status = ?";
         $params = [$status];
         
         if ($result !== null) {
@@ -98,6 +98,6 @@ class Test {
      * Delete test
      */
     public function delete(int $testId): bool {
-        return $this->db->delete("DELETE FROM tests WHERE test_id = ?", [$testId]) > 0;
+        return $this->db->delete("DELETE FROM patient_tests WHERE test_id = ?", [$testId]) > 0;
     }
 }

@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
         
         // Insert amendment - we need to modify the Prescription class
-        $sql = "INSERT INTO prescriptions (
+        $sql = "INSERT INTO patient_prescriptions (
                     prescription_code, visit_id, patient_id, doctor_id,
                     prescription_date, notes, parent_prescription_id
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Log activity
         $user = new User();
-        $user->logActivity('Amend Prescription', 'prescriptions', $amendedRxId, 
+        $user->logActivity('Amend Prescription', 'patient_prescriptions', $amendedRxId, 
                           'Created amended prescription for original RX #' . $prescriptionId);
         
         redirect(APP_URL . '/doctor/print-prescription.php?id=' . $amendedRxId, 'success', 

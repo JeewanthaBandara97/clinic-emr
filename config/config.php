@@ -24,10 +24,10 @@ define('APP_VERSION', '1.0.0');
 define('APP_URL', 'http://localhost/MY/EMR/clinic-emr'); // Update this to your path
 
 // Clinic Information
-define('CLINIC_NAME', 'City Health Clinic');
-define('CLINIC_ADDRESS', '123 Main Street, City, Country');
-define('CLINIC_PHONE', '+1 234 567 8900');
-define('CLINIC_EMAIL', 'info@cityhealthclinic.com');
+define('CLINIC_NAME', 'Co-Operative Hospital');
+define('CLINIC_ADDRESS', 'No. 303, Colombo Road, Kurunegala, Sri Lanka');
+define('CLINIC_PHONE', '+94 37 222 2464');
+define('CLINIC_EMAIL', 'info@kch.com');
 
 // File Paths
 define('ROOT_PATH', dirname(__DIR__) . '/');

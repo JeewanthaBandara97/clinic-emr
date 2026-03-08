@@ -18,7 +18,7 @@ class Prescription {
      */
     public function generatePrescriptionCode(): string {
         $date = date('Ymd');
-        $sql = "SELECT COUNT(*) as count FROM prescriptions WHERE prescription_date = CURDATE()";
+        $sql = "SELECT COUNT(*) as count FROM patient_prescriptions WHERE prescription_date = CURDATE()";
         $result = $this->db->fetchOne($sql);
         $count = ($result['count'] ?? 0) + 1;
         return 'RX' . $date . str_pad($count, 4, '0', STR_PAD_LEFT);
@@ -28,7 +28,7 @@ class Prescription {
      * Create prescription
      */
     public function create(array $data): int {
-        $sql = "INSERT INTO prescriptions (
+        $sql = "INSERT INTO patient_prescriptions (
                     prescription_code, visit_id, patient_id, doctor_id,
                     prescription_date, notes, status
                 ) VALUES (?, ?, ?, ?, ?, ?, 'Active')";
@@ -47,7 +47,7 @@ class Prescription {
      * Add medicine to prescription
      */
     public function addMedicine(int $prescriptionId, array $medicine): int {
-        $sql = "INSERT INTO prescription_medicines (
+        $sql = "INSERT INTO patient_prescription_medicines (
                     prescription_id, medicine_name, dose, frequency,
                     duration_days, quantity, route, instructions
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -91,11 +91,13 @@ class Prescription {
                     p.gender as patient_gender, p.phone as patient_phone,
                     p.address as patient_address, p.allergies,
                     u.full_name as doctor_name,
-                    v.diagnosis, v.symptoms
-                FROM prescriptions pr
+                    dd.specialization, dd.qualification, dd.license_number,
+                    v.diagnosis, v.symptoms, v.notes as clinical_notes, v.follow_up_date
+                FROM patient_prescriptions pr
                 JOIN patients p ON pr.patient_id = p.patient_id
                 JOIN users u ON pr.doctor_id = u.user_id
-                JOIN visits v ON pr.visit_id = v.visit_id
+                LEFT JOIN doctor_details dd ON u.user_id = dd.user_id
+                JOIN patient_visits v ON pr.visit_id = v.visit_id
                 WHERE pr.prescription_id = ?";
         
         return $this->db->fetchOne($sql, [$prescriptionId]);
@@ -105,7 +107,7 @@ class Prescription {
      * Get prescription by visit ID
      */
     public function getByVisitId(int $visitId): ?array {
-        $sql = "SELECT * FROM prescriptions WHERE visit_id = ?";
+        $sql = "SELECT * FROM patient_prescriptions WHERE visit_id = ?";
         return $this->db->fetchOne($sql, [$visitId]);
     }
     
@@ -113,7 +115,7 @@ class Prescription {
      * Get medicines for a prescription
      */
     public function getMedicines(int $prescriptionId): array {
-        $sql = "SELECT * FROM prescription_medicines WHERE prescription_id = ? ORDER BY medicine_id";
+        $sql = "SELECT * FROM patient_prescription_medicines WHERE prescription_id = ? ORDER BY medicine_id";
         return $this->db->fetchAll($sql, [$prescriptionId]);
     }
     
@@ -122,7 +124,7 @@ class Prescription {
      */
     public function getByPatientId(int $patientId, int $limit = 10): array {
         $sql = "SELECT pr.*, u.full_name as doctor_name
-                FROM prescriptions pr
+                FROM patient_prescriptions pr
                 JOIN users u ON pr.doctor_id = u.user_id
                 WHERE pr.patient_id = ?
                 ORDER BY pr.prescription_date DESC
@@ -134,7 +136,7 @@ class Prescription {
      * Delete medicine from prescription
      */
     public function deleteMedicine(int $medicineId): bool {
-        return $this->db->delete("DELETE FROM prescription_medicines WHERE medicine_id = ?", [$medicineId]) > 0;
+        return $this->db->delete("DELETE FROM patient_prescription_medicines WHERE medicine_id = ?", [$medicineId]) > 0;
     }
     
     /**

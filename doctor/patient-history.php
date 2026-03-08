@@ -40,8 +40,8 @@ $tests = $testObj->getByPatientId($patientId, 20);
 $db = Database::getInstance();
 $vitalSigns = $db->fetchAll(
     "SELECT vs.*, v.visit_code, v.visit_date, v.visit_time
-     FROM vital_signs vs
-     JOIN visits v ON vs.visit_id = v.visit_id
+     FROM patient_vital_signs vs
+     JOIN patient_visits v ON vs.visit_id = v.visit_id
      WHERE vs.patient_id = ?
      ORDER BY v.visit_date DESC, v.visit_time DESC
      LIMIT 20",

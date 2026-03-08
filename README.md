@@ -234,12 +234,12 @@ The system uses a normalized MySQL database with the following main tables:
 | `patients` | Patient demographic and medical information |
 | `clinic_sessions` | Daily clinic sessions |
 | `session_patients` | Link patients to sessions |
-| `visits` | Patient visits/consultations |
-| `vital_signs` | Vital signs recorded during visits |
-| `tests` | Medical tests requested |
+| `patient_visits` | Patient visits/consultations |
+| `patient_vital_signs` | Vital signs recorded during visits |
+| `patient_tests` | Medical tests requested |
 | `medicines` | Medicine database for prescriptions |
-| `prescriptions` | Medicine prescriptions |
-| `prescription_items` | Individual medicines in prescriptions |
+| `patient_prescriptions` | Medicine prescriptions |
+| `patient_prescription_medicines` | Individual medicines in prescriptions |
 
 ### Initialize Database
 

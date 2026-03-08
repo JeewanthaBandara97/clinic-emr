@@ -227,9 +227,21 @@ function getGenders(): array {
 
 /**
  * Get test types
+ *
+ * Previously returned a hard coded array. Now that a `test_types` table exists
+ * we load the current active types from the database so the UI can remain
+ * in sync. This helper still returns a simple list of names for backwards
+ * compatibility with callers that expect a string array.
  */
 function getTestTypes(): array {
-    return ['Blood Test', 'Urine Test', 'X-Ray', 'ECG', 'Ultrasound', 'MRI', 'CT Scan', 'Other'];
+    require_once __DIR__ . '/../classes/LabTest.php';
+    $labTest = new LabTest();
+    $types = $labTest->getTypeList(true);
+    $names = [];
+    foreach ($types as $t) {
+        $names[] = $t['type_name'];
+    }
+    return $names;
 }
 
 /**

@@ -4,11 +4,16 @@
  * Handles dynamic data loading for visit creation
  */
 
-require_once __DIR__ . '/../includes/auth.php';
+// turn on error reporting for troubleshooting AJAX 500s
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+
+require_once __DIR__ . '/../../includes/auth.php';
 requireDoctor();
 
-require_once __DIR__ . '/../classes/Medicine.php';
-require_once __DIR__ . '/../classes/LabTest.php';
+require_once __DIR__ . '/../../classes/Medicine.php';
+require_once __DIR__ . '/../../classes/LabTest.php';
 
 header('Content-Type: application/json');
 
@@ -28,10 +33,11 @@ try {
             $term = trim($_GET['term'] ?? '');
             $limit = (int)($_GET['limit'] ?? 15);
             
-            if (strlen($term) < 2) {
-                echo json_encode([]);
-                exit;
-            }
+            // allow empty or short term so the dropdown can fire even with no input
+            //if (strlen($term) < 2) {
+            //    echo json_encode([]);
+            //    exit;
+            //}
             
             $results = $medicine->searchForPrescription($term, $limit);
             

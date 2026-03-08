@@ -31,8 +31,8 @@ if ($visit['doctor_id'] != User::getUserId()) {
 
 // Get all prescriptions for this visit (original + amendments)
 $sql = "SELECT pr.*, u.full_name as doctor_name,
-           (SELECT COUNT(*) FROM prescriptions WHERE parent_prescription_id = pr.prescription_id) as amendment_count
-        FROM prescriptions pr
+           (SELECT COUNT(*) FROM patient_prescriptions WHERE parent_prescription_id = pr.prescription_id) as amendment_count
+        FROM patient_prescriptions pr
         JOIN users u ON pr.doctor_id = u.user_id
         WHERE pr.visit_id = ?
         ORDER BY pr.prescription_id ASC";

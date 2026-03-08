@@ -449,7 +449,7 @@ class User {
      */
     public function getTodayVisitCount(): int {
         try {
-            $sql = "SELECT COUNT(*) as total FROM visits WHERE visit_date = CURDATE()";
+            $sql = "SELECT COUNT(*) as total FROM patient_visits WHERE visit_date = CURDATE()";
             $result = $this->db->fetchOne($sql);
             return $result ? (int)$result['total'] : 0;
         } catch (\Exception $e) {
