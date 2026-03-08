@@ -261,6 +261,20 @@ function getFrequencies(): array {
 }
 
 /**
+ * Get medicines from database
+ */
+function getMedicines(): array {
+    try {
+        require_once __DIR__ . '/../classes/Database.php';
+        $db = Database::getInstance();
+        $medicines = $db->fetchAll("SELECT * FROM `medicines` ORDER BY `medicines`.`medicine_name` ASC");
+        return is_array($medicines) ? $medicines : [];
+    } catch (Exception $e) {
+        return [];
+    }
+}
+
+/**
  * Debug function
  */
 function dd($data): void {

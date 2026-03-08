@@ -111,6 +111,16 @@ $currentPage = $currentPage ?? '';
                 </a>
             </li>
 
+            <!-- TESTS -->
+            <li class="nav-section">Tests</li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/assistant/lab-test.php"
+                    class="nav-link <?php echo $currentPage == 'lab-test' ? 'active' : ''; ?>">
+                    <i class="bi bi-vial"></i>
+                    <span>Lab Tests</span>
+                </a>
+            </li>
 
         <?php elseif ($isDoctor): ?>
 

@@ -189,4 +189,16 @@ class Visit {
                 LIMIT ?";
         return $this->db->fetchAll($sql, [$patientId, $limit]);
     }
+    
+    /**
+     * Get patient's most recent "In Progress" visit
+     * Used to restore visit when doctor returns to a patient
+     */
+    public function getPatientInProgressVisit(int $patientId): ?array {
+        $sql = "SELECT * FROM visits 
+                WHERE patient_id = ? AND status = 'In Progress'
+                ORDER BY created_at DESC, visit_id DESC
+                LIMIT 1";
+        return $this->db->fetchOne($sql, [$patientId]);
+    }
 }

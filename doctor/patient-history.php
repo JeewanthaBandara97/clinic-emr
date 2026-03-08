@@ -6,7 +6,10 @@
 
 require_once __DIR__ . '/../includes/auth.php';
 requireDoctor();
+require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/functions.php';   // ADD THIS 
 
+require_once __DIR__ . '/../classes/Database.php';
 require_once __DIR__ . '/../classes/Patient.php';
 require_once __DIR__ . '/../classes/Visit.php';
 require_once __DIR__ . '/../classes/Prescription.php';
@@ -32,6 +35,18 @@ if (!$patient) {
 $visits = $visitObj->getByPatientId($patientId, 50);
 $prescriptions = $prescriptionObj->getByPatientId($patientId, 20);
 $tests = $testObj->getByPatientId($patientId, 20);
+
+// Get vital signs
+$db = Database::getInstance();
+$vitalSigns = $db->fetchAll(
+    "SELECT vs.*, v.visit_code, v.visit_date, v.visit_time
+     FROM vital_signs vs
+     JOIN visits v ON vs.visit_id = v.visit_id
+     WHERE vs.patient_id = ?
+     ORDER BY v.visit_date DESC, v.visit_time DESC
+     LIMIT 20",
+    [$patientId]
+);
 
 $pageTitle = $patient['full_name'] . ' - Medical History';
 
@@ -77,6 +92,11 @@ require_once __DIR__ . '/../includes/sidebar.php';
     <li class="nav-item">
         <a class="nav-link active" id="visits-tab" data-bs-toggle="tab" href="#visits" role="tab">
             <i class="bi bi-calendar-check me-1"></i>Visits (<?php echo count($visits); ?>)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="vital-signs-tab" data-bs-toggle="tab" href="#vital-signs" role="tab">
+            <i class="bi bi-activity me-1"></i>Vital Signs (<?php echo count($vitalSigns); ?>)
         </a>
     </li>
     <li class="nav-item">
@@ -128,10 +148,110 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                     <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $visit['status'])); ?>">
                                         <?php echo $visit['status']; ?>
                                     </span>
+                                    <div class="mt-2">
+                                        <a href="visit-prescriptions.php?visit_id=<?php echo $visit['visit_id']; ?>" 
+                                           class="btn btn-sm btn-outline-primary" title="View prescriptions for this visit">
+                                            <i class="bi bi-capsule me-1"></i>Rx
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Vital Signs Tab -->
+    <div class="tab-pane fade" id="vital-signs" role="tabpanel">
+        <div class="card border-top-0 rounded-top-0">
+            <div class="card-body p-0">
+                <?php if (empty($vitalSigns)): ?>
+                    <div class="text-center py-5">
+                        <i class="bi bi-activity display-4 text-muted"></i>
+                        <p class="text-muted mt-2">No vital signs recorded</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Visit Code</th>
+                                    <th>Temperature</th>
+                                    <th>BP (Systolic/Diastolic)</th>
+                                    <th>Pulse</th>
+                                    <th>Weight</th>
+                                    <th>Height</th>
+                                    <th>BMI</th>
+                                    <th>SpO₂</th>
+                                    <th>RR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($vitalSigns as $vital): ?>
+                                    <tr>
+                                        <td>
+                                            <small><?php echo formatDateTime($vital['visit_date'] . ' ' . $vital['visit_time']); ?></small>
+                                        </td>
+                                        <td>
+                                            <code><?php echo $vital['visit_code']; ?></code>
+                                        </td>
+                                        <td>
+                                            <?php if ($vital['temperature']): ?>
+                                                <span class="<?php echo $vital['temperature'] > 38 ? 'text-danger' : ($vital['temperature'] < 36 ? 'text-warning' : ''); ?>">
+                                                    <?php echo number_format($vital['temperature'], 1); ?>°C
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($vital['blood_pressure_systolic']): ?>
+                                                <?php echo $vital['blood_pressure_systolic']; ?>/<?php echo $vital['blood_pressure_diastolic'] ?? '-'; ?>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $vital['pulse_rate'] ?? '-'; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $vital['weight'] ? number_format($vital['weight'], 2) . ' kg' : '-'; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $vital['height'] ? number_format($vital['height'], 2) . ' cm' : '-'; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($vital['bmi']): ?>
+                                                <span class="<?php 
+                                                    $bmi = $vital['bmi'];
+                                                    echo $bmi < 18.5 ? 'text-info' : ($bmi < 25 ? 'text-success' : ($bmi < 30 ? 'text-warning' : 'text-danger'));
+                                                ?>">
+                                                    <?php echo number_format($vital['bmi'], 1); ?>
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($vital['oxygen_saturation']): ?>
+                                                <span class="<?php echo $vital['oxygen_saturation'] < 95 ? 'text-danger' : 'text-success'; ?>">
+                                                    <?php echo $vital['oxygen_saturation']; ?>%
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="text-muted">-</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $vital['respiratory_rate'] ?? '-'; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>

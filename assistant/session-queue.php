@@ -566,21 +566,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
 </div>
 
 <style>
-/* Queue Number Badge */
-.queue-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: #fff;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 16px;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
-
 /* Small Avatar */
 .avatar-sm {
     width: 35px;
@@ -593,31 +578,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
     font-weight: 600;
     color: #64748b;
     font-size: 14px;
-}
-
-/* Status Badges */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.status-waiting {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-in-progress {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.status-completed {
-    background: #d1fae5;
-    color: #065f46;
 }
 
 /* Row hover effect */
