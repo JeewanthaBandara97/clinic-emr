@@ -5,7 +5,8 @@
 
 require_once __DIR__ . '/../includes/auth.php';
 requireAssistant();
-
+require_once __DIR__ . '/../includes/functions.php';   // ADD THIS
+require_once __DIR__ . '/../includes/csrf.php';   // ADD THIS
 require_once __DIR__ . '/../classes/Medicine.php';
 
 $medicineId = isset($_GET['id']) ? (int)$_GET['id'] : 0;

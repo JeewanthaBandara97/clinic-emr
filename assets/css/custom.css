@@ -52,3 +52,49 @@
 .btn-group > .btn:active {
     box-shadow: none;
 }
+
+
+/* Sidebar Section Title */
+
+.nav-section {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #64748b;
+    padding: 15px 25px 5px 25px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Hover Animation */
+
+.sidebar-nav .nav-link {
+    font-size: 14px;
+}
+
+.sidebar-nav .nav-link i {
+    opacity: 0.9;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover i {
+    transform: scale(1.15);
+}
+
+/* Mobile Sidebar */
+
+@media (max-width: 768px) {
+
+.sidebar {
+    transform: translateX(-100%);
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.main-content.active {
+    margin-left: 0;
+}
+
+}
+
