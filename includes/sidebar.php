@@ -117,8 +117,19 @@ $currentPage = $currentPage ?? '';
             <li class="nav-item">
                 <a href="<?php echo APP_URL; ?>/assistant/lab-test.php"
                     class="nav-link <?php echo $currentPage == 'lab-test' ? 'active' : ''; ?>">
-                    <i class="bi bi-vial"></i>
+                    <i class="bi bi-bandaid"></i>
                     <span>Lab Tests</span>
+                </a>
+            </li>
+
+            <!-- BILLING -->
+            <li class="nav-section">BILLING</li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/assistant/invoices.php"
+                    class="nav-link <?php echo $currentPage == 'invoices' ? 'active' : ''; ?>">
+                    <i class="bi bi-receipt"></i>
+                    <span>Invoices & Billing</span>
                 </a>
             </li>
 
@@ -148,6 +159,57 @@ $currentPage = $currentPage ?? '';
                     class="nav-link <?php echo $currentPage == 'search-patient' ? 'active' : ''; ?>">
                     <i class="bi bi-search"></i>
                     <span>Search Patient</span>
+                </a>
+            </li>
+
+        <?php else: // Admin ?>
+
+            <!-- ADMINISTRATION -->
+            <li class="nav-section">ADMINISTRATION</li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/admin/index.php"
+                    class="nav-link <?php echo $currentPage == 'index' ? 'active' : ''; ?>">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <!-- OPERATIONS -->
+            <li class="nav-section">OPERATIONS</li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/admin/inventory.php"
+                    class="nav-link <?php echo $currentPage == 'inventory' ? 'active' : ''; ?>">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Inventory</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/admin/reports.php"
+                    class="nav-link <?php echo $currentPage == 'reports' ? 'active' : ''; ?>">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Reports & Analytics</span>
+                </a>
+            </li>
+
+            <!-- USERS -->
+            <li class="nav-section">USERS & STAFF</li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/admin/doctors.php"
+                    class="nav-link <?php echo $currentPage == 'doctors' ? 'active' : ''; ?>">
+                    <i class="bi bi-heart-pulse"></i>
+                    <span>Doctors</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="<?php echo APP_URL; ?>/admin/assistants.php"
+                    class="nav-link <?php echo $currentPage == 'assistants' ? 'active' : ''; ?>">
+                    <i class="bi bi-person-badge"></i>
+                    <span>Assistants</span>
                 </a>
             </li>
 

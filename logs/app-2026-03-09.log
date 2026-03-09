@@ -1,0 +1,538 @@
+[2026-03-09 20:55:30] [DEBUG] No visitId found - checking for existing In Progress visit for patient 4
+[2026-03-09 20:56:31] [DEBUG] No visitId found - checking for existing In Progress visit for patient 4
+[2026-03-09 20:56:31] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 20:56:31] [DEBUG] POST visit_id: NONE
+[2026-03-09 20:56:31] [DEBUG] SESSION visit_id: NONE
+[2026-03-09 20:56:31] [DEBUG] POST action: complete
+[2026-03-09 20:56:31] [INFO] >>> CREATING new visit (no visitId found)
+[2026-03-09 20:56:31] [INFO] >>> Generated visit code: VIS202603090001
+[2026-03-09 20:56:31] [INFO] >>> New visit created with ID: 17
+[2026-03-09 20:56:31] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 17
+    [patient_id] => 4
+    [temperature] => 31
+    [blood_pressure_systolic] => 86
+    [blood_pressure_diastolic] => 143
+    [pulse_rate] => 141
+    [respiratory_rate] => 31
+    [weight] => 315
+    [height] => 97
+    [oxygen_saturation] => 78
+    [bmi] => 334.8
+    [notes] => 
+)
+
+[2026-03-09 20:56:31] [INFO] Vital signs saved successfully, ID: 17
+[2026-03-09 20:56:31] [DEBUG] Processing tests...
+[2026-03-09 20:56:31] [INFO] Saving 2 new tests
+[2026-03-09 20:56:31] [INFO] New tests saved successfully
+[2026-03-09 20:56:31] [DEBUG] Processing medicines...
+[2026-03-09 20:56:31] [DEBUG] Creating new prescription with data: Array
+(
+    [prescription_code] => RX202603090001
+    [visit_id] => 17
+    [patient_id] => 4
+    [doctor_id] => 2
+    [prescription_date] => 2026-03-09
+    [notes] => zz
+)
+
+[2026-03-09 20:56:31] [INFO] Prescription created, ID: 33
+[2026-03-09 20:56:31] [INFO] Adding 1 new medicines
+[2026-03-09 20:56:31] [INFO] New medicines added successfully
+[2026-03-09 20:57:52] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 20:58:16] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 20:58:16] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 21:00:59] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 21:02:00] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 21:02:00] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:02:00] [DEBUG] POST visit_id: NONE
+[2026-03-09 21:02:00] [DEBUG] SESSION visit_id: NONE
+[2026-03-09 21:02:00] [DEBUG] POST action: save
+[2026-03-09 21:02:00] [INFO] >>> CREATING new visit (no visitId found)
+[2026-03-09 21:02:00] [INFO] >>> Generated visit code: VIS202603090002
+[2026-03-09 21:02:00] [INFO] >>> New visit created with ID: 18
+[2026-03-09 21:02:00] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:02:00] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:02:00] [DEBUG] Processing tests...
+[2026-03-09 21:02:00] [INFO] Saving 2 new tests
+[2026-03-09 21:02:00] [INFO] New tests saved successfully
+[2026-03-09 21:02:00] [DEBUG] Processing medicines...
+[2026-03-09 21:02:00] [DEBUG] Creating new prescription with data: Array
+(
+    [prescription_code] => RX202603090002
+    [visit_id] => 18
+    [patient_id] => 5
+    [doctor_id] => 2
+    [prescription_date] => 2026-03-09
+    [notes] => 
+)
+
+[2026-03-09 21:02:00] [INFO] Prescription created, ID: 34
+[2026-03-09 21:02:00] [INFO] Adding 3 new medicines
+[2026-03-09 21:02:00] [INFO] New medicines added successfully
+[2026-03-09 21:02:00] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:02:00] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:02:00] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:02:00] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:02:00] [INFO] Found 2 existing tests
+[2026-03-09 21:02:00] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:02:00] [INFO] Found 3 medicines
+[2026-03-09 21:02:48] [DEBUG] Retrieved visitId from SESSION: 18
+[2026-03-09 21:02:48] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:02:48] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:02:48] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:02:48] [INFO] Found 2 existing tests
+[2026-03-09 21:02:48] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:02:48] [INFO] Found 3 medicines
+[2026-03-09 21:03:32] [DEBUG] Retrieved visitId from POST: 18
+[2026-03-09 21:03:32] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:03:32] [DEBUG] POST visit_id: 18
+[2026-03-09 21:03:32] [DEBUG] SESSION visit_id: 18
+[2026-03-09 21:03:32] [DEBUG] POST action: save
+[2026-03-09 21:03:32] [INFO] >>> UPDATING existing visit ID: 18
+[2026-03-09 21:03:32] [INFO] >>> Update result: SUCCESS
+[2026-03-09 21:03:32] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:03:32] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:03:32] [DEBUG] Processing tests...
+[2026-03-09 21:03:32] [DEBUG] Updating existing test ID 27
+[2026-03-09 21:03:32] [DEBUG] Updating existing test ID 28
+[2026-03-09 21:03:32] [DEBUG] Found existing prescription for visit 18: ID 34
+[2026-03-09 21:03:32] [DEBUG] Processing medicines...
+[2026-03-09 21:03:32] [DEBUG] Updating existing prescription ID: 34
+[2026-03-09 21:03:32] [DEBUG] Updating existing prescription medicine ID 25
+[2026-03-09 21:03:32] [DEBUG] Updating existing prescription medicine ID 26
+[2026-03-09 21:03:32] [DEBUG] Updating existing prescription medicine ID 27
+[2026-03-09 21:03:32] [INFO] Adding 2 new medicines
+[2026-03-09 21:03:32] [INFO] New medicines added successfully
+[2026-03-09 21:03:33] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:03:33] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:03:33] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:03:33] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:03:33] [INFO] Found 2 existing tests
+[2026-03-09 21:03:33] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:03:33] [INFO] Found 5 medicines
+[2026-03-09 21:03:51] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:03:51] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:03:51] [DEBUG] POST visit_id: 18
+[2026-03-09 21:03:51] [DEBUG] SESSION visit_id: 18
+[2026-03-09 21:03:51] [DEBUG] POST action: save
+[2026-03-09 21:03:51] [INFO] >>> UPDATING existing visit ID: 18
+[2026-03-09 21:03:51] [INFO] >>> Update result: SUCCESS
+[2026-03-09 21:03:51] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:03:51] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:03:51] [DEBUG] Processing tests...
+[2026-03-09 21:03:51] [DEBUG] Updating existing test ID 27
+[2026-03-09 21:03:51] [DEBUG] Updating existing test ID 28
+[2026-03-09 21:03:51] [DEBUG] Found existing prescription for visit 18: ID 34
+[2026-03-09 21:03:51] [DEBUG] Processing medicines...
+[2026-03-09 21:03:51] [DEBUG] Updating existing prescription ID: 34
+[2026-03-09 21:03:51] [DEBUG] Updating existing prescription medicine ID 25
+[2026-03-09 21:03:51] [DEBUG] Updating existing prescription medicine ID 28
+[2026-03-09 21:03:51] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:03:51] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:03:51] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:03:51] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:03:51] [INFO] Found 2 existing tests
+[2026-03-09 21:03:51] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:03:51] [INFO] Found 5 medicines
+[2026-03-09 21:05:20] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:05:20] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:05:20] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:05:20] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:05:20] [INFO] Found 2 existing tests
+[2026-03-09 21:05:20] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:05:20] [INFO] Found 5 medicines
+[2026-03-09 21:05:27] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:05:27] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:05:27] [DEBUG] POST visit_id: 18
+[2026-03-09 21:05:27] [DEBUG] SESSION visit_id: 18
+[2026-03-09 21:05:27] [DEBUG] POST action: save
+[2026-03-09 21:05:27] [INFO] >>> UPDATING existing visit ID: 18
+[2026-03-09 21:05:27] [INFO] >>> Update result: SUCCESS
+[2026-03-09 21:05:27] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:05:27] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:05:27] [DEBUG] Deleting tests: 27
+[2026-03-09 21:05:27] [DEBUG] Processing tests...
+[2026-03-09 21:05:27] [DEBUG] Updating existing test ID 28
+[2026-03-09 21:05:27] [DEBUG] Found existing prescription for visit 18: ID 34
+[2026-03-09 21:05:27] [DEBUG] Processing medicines...
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription ID: 34
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription medicine ID 25
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription medicine ID 26
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription medicine ID 27
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription medicine ID 28
+[2026-03-09 21:05:27] [DEBUG] Updating existing prescription medicine ID 29
+[2026-03-09 21:05:27] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:05:27] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:05:27] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:05:27] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:05:27] [INFO] Found 1 existing tests
+[2026-03-09 21:05:27] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:05:27] [INFO] Found 5 medicines
+[2026-03-09 21:05:41] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:05:41] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:05:41] [DEBUG] POST visit_id: 18
+[2026-03-09 21:05:41] [DEBUG] SESSION visit_id: 18
+[2026-03-09 21:05:41] [DEBUG] POST action: save
+[2026-03-09 21:05:41] [INFO] >>> UPDATING existing visit ID: 18
+[2026-03-09 21:05:41] [INFO] >>> Update result: SUCCESS
+[2026-03-09 21:05:41] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:05:41] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:05:41] [DEBUG] Processing tests...
+[2026-03-09 21:05:41] [DEBUG] Updating existing test ID 28
+[2026-03-09 21:05:41] [DEBUG] Found existing prescription for visit 18: ID 34
+[2026-03-09 21:05:41] [DEBUG] Deleted medicine ID 25
+[2026-03-09 21:05:41] [DEBUG] Deleted medicine ID 26
+[2026-03-09 21:05:41] [DEBUG] Deleted medicine ID 27
+[2026-03-09 21:05:41] [DEBUG] Deleted medicine ID 28
+[2026-03-09 21:05:41] [DEBUG] Processing medicines...
+[2026-03-09 21:05:41] [DEBUG] Updating existing prescription ID: 34
+[2026-03-09 21:05:41] [DEBUG] Updating existing prescription medicine ID 29
+[2026-03-09 21:05:41] [DEBUG] Retrieved visitId from URL: 18
+[2026-03-09 21:05:41] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:05:41] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:05:41] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:05:41] [INFO] Found 1 existing tests
+[2026-03-09 21:05:41] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:05:41] [INFO] Found 1 medicines
+[2026-03-09 21:09:02] [DEBUG] No visitId found - checking for existing In Progress visit for patient 5
+[2026-03-09 21:09:02] [INFO] Found existing In Progress visit: 18
+[2026-03-09 21:09:02] [DEBUG] Loading existing vital signs for visit ID: 18
+[2026-03-09 21:09:02] [INFO] Found existing vital signs: Array
+(
+    [vital_id] => 18
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37.0
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279.00
+    [height] => 175.00
+    [bmi] => 91.1
+    [oxygen_saturation] => 91
+    [notes] => 
+    [recorded_at] => 2026-03-09 21:02:00
+)
+
+[2026-03-09 21:09:02] [INFO] Loaded visit data - Symptoms: Placeat velit et ab
+[2026-03-09 21:09:02] [INFO] Found 1 existing tests
+[2026-03-09 21:09:02] [INFO] Found existing prescription ID: 34
+[2026-03-09 21:09:02] [INFO] Found 1 medicines
+[2026-03-09 21:09:04] [DEBUG] Retrieved visitId from POST: 18
+[2026-03-09 21:09:04] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:09:04] [DEBUG] POST visit_id: 18
+[2026-03-09 21:09:04] [DEBUG] SESSION visit_id: 18
+[2026-03-09 21:09:04] [DEBUG] POST action: complete
+[2026-03-09 21:09:04] [INFO] >>> UPDATING existing visit ID: 18
+[2026-03-09 21:09:04] [INFO] >>> Update result: SUCCESS
+[2026-03-09 21:09:04] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 18
+    [patient_id] => 5
+    [temperature] => 37
+    [blood_pressure_systolic] => 141
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 147
+    [respiratory_rate] => 44
+    [weight] => 279
+    [height] => 175
+    [oxygen_saturation] => 91
+    [bmi] => 91.1
+    [notes] => 
+)
+
+[2026-03-09 21:09:04] [INFO] Vital signs saved successfully, ID: 18
+[2026-03-09 21:09:04] [DEBUG] Processing tests...
+[2026-03-09 21:09:04] [DEBUG] Updating existing test ID 28
+[2026-03-09 21:09:04] [DEBUG] Found existing prescription for visit 18: ID 34
+[2026-03-09 21:09:04] [DEBUG] Processing medicines...
+[2026-03-09 21:09:04] [DEBUG] Updating existing prescription ID: 34
+[2026-03-09 21:09:04] [DEBUG] Updating existing prescription medicine ID 29
+[2026-03-09 21:09:04] [WARN] Failed to auto-save invoice: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY'
+[2026-03-09 21:12:23] [DEBUG] No visitId found - checking for existing In Progress visit for patient 4
+[2026-03-09 21:13:13] [DEBUG] No visitId found - checking for existing In Progress visit for patient 7
+[2026-03-09 21:13:44] [DEBUG] No visitId found - checking for existing In Progress visit for patient 7
+[2026-03-09 21:13:44] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:13:44] [DEBUG] POST visit_id: NONE
+[2026-03-09 21:13:44] [DEBUG] SESSION visit_id: NONE
+[2026-03-09 21:13:44] [DEBUG] POST action: complete
+[2026-03-09 21:13:44] [INFO] >>> CREATING new visit (no visitId found)
+[2026-03-09 21:13:44] [INFO] >>> Generated visit code: VIS202603090003
+[2026-03-09 21:13:44] [INFO] >>> New visit created with ID: 19
+[2026-03-09 21:13:44] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 19
+    [patient_id] => 7
+    [temperature] => 45
+    [blood_pressure_systolic] => 205
+    [blood_pressure_diastolic] => 89
+    [pulse_rate] => 73
+    [respiratory_rate] => 34
+    [weight] => 471
+    [height] => 227
+    [oxygen_saturation] => 97
+    [bmi] => 91.4
+    [notes] => 
+)
+
+[2026-03-09 21:13:44] [INFO] Vital signs saved successfully, ID: 19
+[2026-03-09 21:13:44] [DEBUG] Processing tests...
+[2026-03-09 21:13:44] [INFO] Saving 1 new tests
+[2026-03-09 21:13:44] [INFO] New tests saved successfully
+[2026-03-09 21:13:44] [DEBUG] Processing medicines...
+[2026-03-09 21:13:44] [DEBUG] Creating new prescription with data: Array
+(
+    [prescription_code] => RX202603090003
+    [visit_id] => 19
+    [patient_id] => 7
+    [doctor_id] => 2
+    [prescription_date] => 2026-03-09
+    [notes] => 
+)
+
+[2026-03-09 21:13:44] [INFO] Prescription created, ID: 35
+[2026-03-09 21:13:44] [INFO] Adding 1 new medicines
+[2026-03-09 21:13:44] [INFO] New medicines added successfully
+[2026-03-09 21:13:44] [WARN] Failed to auto-save invoice: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '0' for key 'PRIMARY'
+[2026-03-09 21:15:21] [DEBUG] No visitId found - checking for existing In Progress visit for patient 6
+[2026-03-09 21:16:04] [DEBUG] No visitId found - checking for existing In Progress visit for patient 6
+[2026-03-09 21:16:04] [DEBUG] === VISIT SAVE DEBUG ===
+[2026-03-09 21:16:04] [DEBUG] POST visit_id: NONE
+[2026-03-09 21:16:04] [DEBUG] SESSION visit_id: NONE
+[2026-03-09 21:16:04] [DEBUG] POST action: complete
+[2026-03-09 21:16:04] [INFO] >>> CREATING new visit (no visitId found)
+[2026-03-09 21:16:04] [INFO] >>> Generated visit code: VIS202603090004
+[2026-03-09 21:16:04] [INFO] >>> New visit created with ID: 20
+[2026-03-09 21:16:04] [DEBUG] Saving vital signs: Array
+(
+    [visit_id] => 20
+    [patient_id] => 6
+    [temperature] => 45
+    [blood_pressure_systolic] => 176
+    [blood_pressure_diastolic] => 85
+    [pulse_rate] => 187
+    [respiratory_rate] => 56
+    [weight] => 244
+    [height] => 49
+    [oxygen_saturation] => 82
+    [bmi] => 1016.2
+    [notes] => 
+)
+
+[2026-03-09 21:16:04] [INFO] Vital signs saved successfully, ID: 20
+[2026-03-09 21:16:04] [DEBUG] Processing tests...
+[2026-03-09 21:16:04] [INFO] Saving 1 new tests
+[2026-03-09 21:16:04] [INFO] New tests saved successfully
+[2026-03-09 21:16:04] [DEBUG] Processing medicines...
+[2026-03-09 21:16:04] [DEBUG] Creating new prescription with data: Array
+(
+    [prescription_code] => RX202603090004
+    [visit_id] => 20
+    [patient_id] => 6
+    [doctor_id] => 2
+    [prescription_date] => 2026-03-09
+    [notes] => 
+)
+
+[2026-03-09 21:16:04] [INFO] Prescription created, ID: 36
+[2026-03-09 21:16:04] [INFO] Adding 3 new medicines
+[2026-03-09 21:16:04] [INFO] New medicines added successfully
+[2026-03-09 21:16:04] [INFO] Auto-saved invoice ID 1 for visit 20

@@ -19,6 +19,7 @@ require_once __DIR__ . '/../classes/Session.php';
 require_once __DIR__ . '/../classes/Visit.php';
 require_once __DIR__ . '/../classes/Test.php';
 require_once __DIR__ . '/../classes/Prescription.php';
+require_once __DIR__ . '/../classes/Invoice.php';
 
 $patientId = isset($_GET['patient_id']) ? (int)$_GET['patient_id'] : 0;
 $sessionId = isset($_GET['session_id']) ? (int)$_GET['session_id'] : null;
@@ -368,6 +369,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         Database::getInstance()->commit();
+
+        // Auto-save invoice when visit is completed (silently, without showing message)
+        if ($action === 'complete') {
+            try {
+                $invoice = new Invoice();
+                
+                // Build invoice items from consultation fee and medicines
+                $invoiceItems = [];
+                
+                // Add consultation fee as an item
+                $invoiceItems[] = [
+                    'type' => 'Consultation',
+                    'description' => 'Doctor Consultation',
+                    'reference_id' => null,
+                    'quantity' => 1,
+                    'unit_price' => 500.00  // Default consultation fee
+                ];
+                
+                // Add prescribed medicines
+                if (isset($prescriptionId)) {
+                    $prescriptionMeds = $prescriptionObj->getMedicines($prescriptionId);
+                    foreach ($prescriptionMeds as $med) {
+                        // Get medicine price from medicines table
+                        $medDetails = $db->fetchOne("SELECT mrp FROM medicines WHERE medicine_name = ?", [$med['medicine_name']]);
+                        $medPrice = $medDetails['mrp'] ?? 100.00;  // Default if not found
+                        
+                        $invoiceItems[] = [
+                            'type' => 'Medicine',
+                            'description' => $med['medicine_name'],
+                            'reference_id' => $med['medicine_id'] ?? null,
+                            'quantity' => 1,
+                            'unit_price' => $medPrice
+                        ];
+                    }
+                }
+                
+                // Create invoice if there are items
+                if (!empty($invoiceItems)) {
+                    try {
+                        $newInvoiceId = $invoice->createFromVisit($visitId, $invoiceItems, [
+                            'patient_id' => $patientId,
+                            'doctor_id' => $doctorId,
+                            'tax_percentage' => 10,
+                            'discount_amount' => 0,
+                            'created_by' => $doctorId
+                        ]);
+                        Logger::info("Auto-saved invoice ID " . $newInvoiceId . " for visit " . $visitId);
+                    } catch (Exception $ie) {
+                        Logger::warning("Failed to auto-save invoice: " . $ie->getMessage());
+                        // Don't throw - invoice creation shouldn't break the visit completion
+                    }
+                }
+            } catch (Exception $e) {
+                Logger::warning("Error in invoice auto-save: " . $e->getMessage());
+                // Don't throw - invoice save shouldn't break the main flow
+            }
+        }
 
         // Log activity
         $user = new User();
@@ -793,7 +851,7 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
                             <div id="medicinesContainer">
                                 <!-- Existing saved medicines -->
                                 <?php foreach ($existingMedicines as $med): ?>
-                                    <div class="medicine-row card mb-3" style="background-color: #f3e5f5; border-left: 4px solid #9C27B0;">
+                                    <div class="medicine-row card mb-3" style="background-color: #f3e5f5; border-left: 4px solid #9C27B0;" data-row="saved_<?php echo $med['medicine_id']; ?>">
                                         <div class="card-body">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
@@ -932,9 +990,33 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
 <script>
     // expose DB-driven test type list to JS
     var testTypes = <?php echo json_encode($testTypes, JSON_UNESCAPED_SLASHES); ?>;
+    
+    // Load medicines list from database
+    var medicinesList = [];
+    var medicinesLoaded = false;
+    
+    function loadMedicines() {
+        if (medicinesLoaded) return Promise.resolve(medicinesList);
+        
+        return fetch('ajax/visit-ajax.php?action=search_medicines&term=')
+            .then(r => r.json())
+            .then(data => {
+                medicinesList = data || [];
+                medicinesLoaded = true;
+                console.log('Loaded ' + medicinesList.length + ' medicines');
+                return medicinesList;
+            })
+            .catch(err => {
+                console.error('Error loading medicines:', err);
+                return [];
+            });
+    }
 
     // Initialize Select2 when jQuery is ready
     $(document).ready(function() {
+        // Pre-load medicines on page load
+        loadMedicines();
+        
         // helper to attach Select2 autocomplete to a medicine select element
         function initMedicineSelect(el) {
             const currentVal = el.value;
@@ -963,7 +1045,7 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
                             results: data.map(function(m) {
                                 return {
                                     id: m.medicine_name,
-                                    text: m.label,
+                                    text: m.label || m.medicine_name,
                                     _raw: m
                                 };
                             })
@@ -1137,6 +1219,15 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
             const medicineCount = document.querySelectorAll('.medicine-row').length;
             const bgColor = medicineColors[medicineCount % medicineColors.length];
 
+            // Build medicine options HTML from loaded medicines
+            let medicineOptionsHtml = '<option value="">Select Medicine</option>';
+            if (medicinesList && medicinesList.length > 0) {
+                medicinesList.forEach(function(med) {
+                    const label = med.label || med.medicine_name;
+                    medicineOptionsHtml += `<option value="${med.medicine_name}">${label}</option>`;
+                });
+            }
+
             const html = `
             <div class="medicine-row card mb-3" style="background-color: ${bgColor}; border-left: 4px solid #9C27B0;">
                 <div class="card-body">
@@ -1144,7 +1235,7 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
                         <div class="col-md-4">
                             <label class="form-label small fw-bold">Medicine Name</label>
                             <select class="form-select form-select-sm medicine-select" name="medicines[${medicineIndex}][medicine_name]">
-                                <option value="">Select Medicine</option>
+                                ${medicineOptionsHtml}
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -1194,7 +1285,7 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
                 </div>
             </div>
         `;
-            container.insertAdjacentHTML('beforeend', html);
+            container.insertAdjacentHTML('afterbegin', html);
 
             // Initialize Select2 autocomplete on the new medicine select
             setTimeout(() => {
@@ -1238,13 +1329,16 @@ if ($flash && !($visitId && $flash['type'] === 'success')) {
                 hid.name = 'medicines_to_delete[]';
                 hid.value = id;
                 // use dedicated container so we can inspect easily
-                document.getElementById('medicinesToDeleteContainer').appendChild(hid);
-            }
-                if (document.querySelectorAll('.medicine-row').length > 1) {
-                    row.remove();
+                const deleteContainer = document.getElementById('medicinesToDeleteContainer');
+                if (deleteContainer) {
+                    deleteContainer.appendChild(hid);
                 }
             }
-        });
+            if (document.querySelectorAll('.medicine-row').length > 1) {
+                row.remove();
+            }
+        }
+    });
 
         // when the type dropdown changes, fetch available tests and update the name dropdown
         document.addEventListener('change', function(e) {

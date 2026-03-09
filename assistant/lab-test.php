@@ -5,6 +5,7 @@
  */
 
 $pageTitle = 'Lab Test Management';
+$currentPage = 'lab-test';
 
 require_once __DIR__ . '/../includes/auth.php';
 requireAssistant();

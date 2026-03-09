@@ -14,6 +14,7 @@ requireDoctor();
 
 require_once __DIR__ . '/../../classes/Medicine.php';
 require_once __DIR__ . '/../../classes/LabTest.php';
+require_once __DIR__ . '/../../includes/csrf.php';
 
 header('Content-Type: application/json');
 
@@ -21,6 +22,11 @@ $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 $medicine = new Medicine();
 $labTest = new LabTest();
+
+// Enforce CSRF on modifying requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    checkCSRF();
+}
 
 try {
     switch ($action) {

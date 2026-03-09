@@ -21,7 +21,7 @@ date_default_timezone_set('Asia/Colombo');
 // Application Settings
 define('APP_NAME', 'Clinic EMR System');
 define('APP_VERSION', '1.0.0');
-define('APP_URL', 'http://localhost/MY/EMR/clinic-emr'); // Update this to your path
+define('APP_URL', 'http://localhost/MY/EMR/clinic-emrV2'); // Update this to your path
 
 // Clinic Information
 define('CLINIC_NAME', 'Co-Operative Hospital');
